@@ -4,34 +4,14 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using MazeGenerating.Data;
 using Color = System.Windows.Media.Color;
-using Point = System.Windows.Point;
-using Size = System.Windows.Size;
 
 namespace MazeGeneratingByBacktracking_WPF.Utils
 {
     internal class MazeDrawer
     {
-        /*
-        public Image CreateImpage(Maze maze, Color floor, Color wall, uint cellSize)
-        {
-            GeometryGroup geometryGroup = new GeometryGroup();
-            //geometryGroup.Children.A
-
-            GeometryDrawing aGeometryDrawing = new GeometryDrawing();
-            //aGeometryDrawing.Geometry = new EllipseGeometry(new Point(50, 50), 50, 50);
-            aGeometryDrawing.Pen = new Pen(Brushes.Red, 10);
-            aGeometryDrawing.Brush = Brushes.Blue;
-            //DrawingImage geometryImage = new DrawingImage(aGeometryDrawing);
-            DrawingImage geometryImage = new DrawingImage();
 
 
-            Image anImage = new Image();
-            anImage.Source = geometryImage;
-            return anImage;
-        }
-        */
-
-        public Rectangle[] CreateCells(Maze maze, uint cellSize, Color floor, Color wall) 
+        public Rectangle[] CreateCells(Maze maze, uint cellSize, Color floor, Color wall)
         {
             var cells = new List<Rectangle>();
             var floorBrush = new SolidColorBrush(floor);
@@ -54,12 +34,12 @@ namespace MazeGeneratingByBacktracking_WPF.Utils
             var rect = new Rectangle();
             rect.Fill = solidColorBrush;
             rect.Width = cellSize;
-            rect.Width = cellSize;
+            rect.Height = cellSize;
 
             Canvas.SetLeft(rect, column * cellSize);
             Canvas.SetTop(rect, row * cellSize);
 
             return rect;
-        }       
+        }
     }
 }

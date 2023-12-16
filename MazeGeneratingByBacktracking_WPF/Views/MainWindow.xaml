@@ -43,7 +43,10 @@
         </StackPanel>
 
         <ScrollViewer
-                Grid.Row = "1" >
+            Grid.Row = "1" 
+            HorizontalScrollBarVisibility="Visible"
+            VerticalScrollBarVisibility="Visible"
+            >
             <Canvas
                 x:Name = "canvas" 
                 Width = "{Binding CanvasWidth}"
