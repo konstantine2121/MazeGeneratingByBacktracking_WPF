@@ -38,8 +38,19 @@
                 Minimum="1"
                 Maximum="300" 
                 />
-            
+
+            <Label>размер клетки</Label>
+
+            <xctk:IntegerUpDown 
+                Value="{Binding CellSize}"  
+                Increment="1" 
+                Minimum="1"
+                Maximum="20" 
+                />
+
             <Button Content="Сгенерировать" Margin="10 0 0 0" Command="{Binding GenerateMazeCommand}"/>
+            
+            <Button Content="Сохранить" Margin="40 0 0 0" Command="{Binding SaveMazeCommand}"/>
         </StackPanel>
 
         <ScrollViewer
@@ -53,13 +64,7 @@
                 Height = "{Binding CanvasHeight}"
                 
                 >
-                <!--
-            <Rectangle Width="25" Height="25" Fill="Red" Margin="2" />
-            <Rectangle Width="25" Height="25" Fill="Green" Margin="2" Canvas.Top="0"  Canvas.Left="25"/>
-            <Rectangle Width="25" Height="25" Fill="Blue" Margin="2" Canvas.Top="0"  Canvas.Left="50"/>
-            <Rectangle Width="25" Height="25" Fill="Black" Margin="2" Canvas.Top="0"  Canvas.Left="75"/>
-            <Rectangle Width="25" Height="25" Fill="DarkBlue" Margin="2" Canvas.Top="0"  Canvas.Left="100"/>            
-            -->
+                
             </Canvas>
         </ScrollViewer>
     </Grid>

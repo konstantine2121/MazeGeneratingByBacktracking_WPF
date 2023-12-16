@@ -11,12 +11,12 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
 {
     internal class GeneratorViewModel : INotifyPropertyChanged
     {
-        private const int CellSize = 16;
 
         #region Fields
 
         private readonly Generator _generator;
         private readonly MazeDrawer _mazeDrawer = new MazeDrawer();
+        private readonly MazeSaver _saver = new MazeSaver();
         private int _canvasWidth;
         private int _canvasHeight;
         private Rectangle[] _cells;
@@ -37,6 +37,10 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
 
             GenerateMazeCommand = new Command(
                 () => _generator.GenerateMaze(),
+                () => true);
+
+            SaveMazeCommand = new Command(
+                () => _saver.Save(Maze),
                 () => true);
 
             UpdateImage();
@@ -86,6 +90,8 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
             }
         }
 
+        public int CellSize { get; set; } = 5;
+
         public Rectangle[] Cells
         {
             get => _cells;
@@ -97,6 +103,8 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
         }
 
         public ICommand GenerateMazeCommand { get; }
+
+        public ICommand SaveMazeCommand { get; }
 
         private Maze Maze => _generator.Maze;
 
@@ -123,7 +131,7 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
             var floor = Color.FromRgb(255, 255, 255);
             var wall = Color.FromRgb(0, 0, 0);
 
-            Cells = _mazeDrawer.CreateCells(Maze, CellSize, floor, wall);
+            Cells = _mazeDrawer.CreateCells(Maze, (uint)CellSize, floor, wall);
         }
 
         private Size GetCanvasSize(int cellSize)
