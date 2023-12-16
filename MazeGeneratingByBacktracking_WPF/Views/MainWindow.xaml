@@ -1,0 +1,63 @@
+﻿<Window x:Class="MazeGeneratingByBacktracking_WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MazeGeneratingByBacktracking_WPF"
+        mc:Ignorable="d"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:viewModel="clr-namespace:MazeGeneratingByBacktracking_WPF.ViewModels"
+        Title="MainWindow" Height="450" Width="800"
+        d:DataContext="{d:DesignInstance Type=viewModel:GeneratorViewModel, IsDesignTimeCreatable=False}"
+        >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Label>Генерация лабиринта: </Label>
+            
+            <Label>ширина</Label>
+            
+            <xctk:IntegerUpDown 
+                x:Name="mazeWidthUpDown" 
+                Value="{Binding MazeWidth}"  
+                Increment="1" 
+                Minimum="1"
+                Maximum="300" 
+                />
+            
+            <Label>высота</Label>
+            
+            <xctk:IntegerUpDown 
+                x:Name="mazeHeightUpDown" 
+                Value="{Binding MazeHeight}" 
+                Increment="1" 
+                Minimum="1"
+                Maximum="300" 
+                />
+            
+            <Button Content="Сгенерировать" Margin="10 0 0 0" Command="{Binding GenerateMazeCommand}"/>
+        </StackPanel>
+
+        <ScrollViewer
+                Grid.Row = "1" >
+            <Canvas
+                x:Name = "canvas" 
+                Width = "{Binding CanvasWidth}"
+                Height = "{Binding CanvasHeight}"
+                
+                >
+                <!--
+            <Rectangle Width="25" Height="25" Fill="Red" Margin="2" />
+            <Rectangle Width="25" Height="25" Fill="Green" Margin="2" Canvas.Top="0"  Canvas.Left="25"/>
+            <Rectangle Width="25" Height="25" Fill="Blue" Margin="2" Canvas.Top="0"  Canvas.Left="50"/>
+            <Rectangle Width="25" Height="25" Fill="Black" Margin="2" Canvas.Top="0"  Canvas.Left="75"/>
+            <Rectangle Width="25" Height="25" Fill="DarkBlue" Margin="2" Canvas.Top="0"  Canvas.Left="100"/>            
+            -->
+            </Canvas>
+        </ScrollViewer>
+    </Grid>
+</Window>
