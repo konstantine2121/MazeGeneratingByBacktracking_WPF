@@ -5,8 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MazeGeneratingByBacktracking_WPF"
         mc:Ignorable="d"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <Label>Генерация лабиринта: </Label>
+            <Label>ширина</Label>
+            <xctk:IntegerUpDown 
+                x:Name="mazeWidthUpDown" 
+                Value="30" 
+                Increment="1" 
+                Minimum="1"
+                Maximum="300" 
+                />
+            <Label>высота</Label>
+            <xctk:IntegerUpDown 
+                x:Name="mazeHeightUpDown" 
+                Value="30" 
+                Increment="1" 
+                Minimum="1"
+                Maximum="300" 
+                />
+            
+            <Button Content="Сгенерировать" Margin="10 0 0 0"/>
+        </StackPanel>
 
     </Grid>
 </Window>
