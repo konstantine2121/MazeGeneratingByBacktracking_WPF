@@ -9,10 +9,11 @@ namespace MazeGeneratingByBacktracking_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly GeneratorViewModel _viewModel = new GeneratorViewModel(new Generator());
+        private readonly GeneratorViewModel _viewModel;
 
         public MainWindow()
         {
+            _viewModel = new GeneratorViewModel(new Generator(), this.Dispatcher);
             InitializeComponent();
             DataContext = _viewModel;
             _viewModel.CellsChanged += OnCellsChanged;

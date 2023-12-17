@@ -10,7 +10,6 @@ namespace MazeGeneratingByBacktracking_WPF.Utils
     internal class MazeDrawer
     {
 
-
         public Rectangle[] CreateCells(Maze maze, uint cellSize, Color floor, Color wall)
         {
             var cells = new List<Rectangle>();

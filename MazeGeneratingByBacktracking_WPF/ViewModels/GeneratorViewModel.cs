@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using MazeGenerating.Data;
 using MazeGeneratingByBacktracking_WPF.Models;
 using MazeGeneratingByBacktracking_WPF.Utils;
@@ -11,10 +13,10 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
 {
     internal class GeneratorViewModel : INotifyPropertyChanged
     {
-
         #region Fields
 
         private readonly Generator _generator;
+        private readonly Dispatcher _dispatcher;
         private readonly MazeDrawer _mazeDrawer = new MazeDrawer();
         private readonly MazeSaver _saver = new MazeSaver();
         private int _canvasWidth;
@@ -30,25 +32,26 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
 
         #endregion Events
 
-        public GeneratorViewModel(Generator generator)
+        public GeneratorViewModel(Generator generator, Dispatcher dispatcher)
         {
             _generator = generator;
+            _dispatcher = dispatcher;
             _generator.MazeGenerated += OnMazeGenerated;
 
             GenerateMazeCommand = new Command(
-                () => _generator.GenerateMaze(),
+                async () => await GenerateMazeAsync(),
                 () => true);
 
             SaveMazeCommand = new Command(
                 () => _saver.Save(Maze),
-                () => true);
+                () => Maze.Width != 1 && Maze.Height != 1);
 
             UpdateImage();
         }
 
         #region Properties
 
-        public int MazeWidth 
+        public int MazeWidth
         {
             get => _generator.Width;
             set => _generator.Width = value;
@@ -112,9 +115,14 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
 
         #region Event Handlers
 
+        private async Task GenerateMazeAsync()
+        {
+            await Task.Run(_generator.GenerateMaze);
+        }
+
         private void OnMazeGenerated(object? sender, System.EventArgs e)
         {
-            UpdateImage();
+            _dispatcher.Invoke(UpdateImage, DispatcherPriority.Render);
         }
 
         #endregion Event Handlers
@@ -124,6 +132,7 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
         private void UpdateImage()
         {
             var canvasSize = GetCanvasSize(CellSize);
+            ((Command)SaveMazeCommand).RaiseCanExecuteChanged();
 
             CanvasHeight = canvasSize.Height;
             CanvasWidth = canvasSize.Width;
