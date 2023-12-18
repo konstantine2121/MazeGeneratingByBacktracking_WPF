@@ -39,7 +39,7 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
 
             GenerateMazeCommand = new Command(
                 async () => await GenerateMazeAsync(),
-                () => true);
+                () => !GeneratingInProgress);
 
             SaveMazeCommand = new Command(
                 () => _saver.Save(Maze),
@@ -92,7 +92,7 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
             }
         }
 
-        public bool DrawingInProgress
+        public bool GeneratingInProgress
         {
             get => drawingInProgress;
             set
@@ -102,12 +102,12 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
                     return;
                 }
                 drawingInProgress = value;
-                RaisePropertyChanged(nameof(DrawingInProgress));
+                RaisePropertyChanged(nameof(GeneratingInProgress));
                 RaisePropertyChanged(nameof(ShowDrawingWarning));
             }
         }
 
-        public Visibility ShowDrawingWarning => DrawingInProgress ?
+        public Visibility ShowDrawingWarning => GeneratingInProgress ?
             Visibility.Visible :
             Visibility.Hidden;
 
@@ -135,6 +135,7 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
 
         private async Task GenerateMazeAsync()
         {
+            GeneratingInProgress = true;
             await Task.Run(_generator.GenerateMaze);
         }
 
@@ -158,11 +159,9 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
             var floor = Color.FromRgb(255, 255, 255);
             var wall = Color.FromRgb(0, 0, 0);
 
-            DrawingInProgress = true;
-
             MazeImage = await Task.Run(() => _mazeDrawer.Draw(Maze, (uint)CellSize, floor, wall));
 
-            DrawingInProgress = false;
+            GeneratingInProgress = false;
         }
 
         private System.Drawing.Size GetCanvasSize(int cellSize)

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MazeGeneratingByBacktracking_WPF"
+        xmlns:converters="clr-namespace:MazeGeneratingByBacktracking_WPF.Converters"
         mc:Ignorable="d"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:viewModel="clr-namespace:MazeGeneratingByBacktracking_WPF.ViewModels"
@@ -17,7 +18,10 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
+        <StackPanel 
+            Orientation="Horizontal" 
+            Grid.Row="0" 
+            Margin="5">
             
             <Label>ширина</Label>
             
@@ -48,12 +52,25 @@
                 Maximum="20" 
                 />
 
-            <Button Content="Сгенерировать" Margin="10 0 0 0" Command="{Binding GenerateMazeCommand}"/>
+            <Button 
+                Content="Сгенерировать" 
+                Margin="10 0 0 0" 
+                IsEnabled="{Binding GeneratingInProgress, Converter={x:Static converters:InverseBooleanConverter.Instance}}" 
+                Command="{Binding GenerateMazeCommand}"/>
             
-            <Button Content="Сохранить" Margin="40 0 0 0" Command="{Binding SaveMazeCommand}"/>
+            <Button 
+                Content="Сохранить" 
+                Margin="40 0 0 0" 
+                Command="{Binding SaveMazeCommand}"/>
+            
         </StackPanel>
 
-        <Label Content="Идет отрисовка" Grid.Row="1" Foreground="Red" FontSize="16" Visibility="{Binding ShowDrawingWarning}" />
+        <Label 
+            Content="Идет отрисовка" 
+            Grid.Row="1" 
+            Foreground="Red" 
+            FontSize="16" 
+            Visibility="{Binding ShowDrawingWarning}" />
 
         <ScrollViewer
             Grid.Row = "2" 

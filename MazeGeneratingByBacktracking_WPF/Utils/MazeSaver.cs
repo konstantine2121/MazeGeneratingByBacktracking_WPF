@@ -21,12 +21,11 @@ namespace MazeGeneratingByBacktracking_WPF.Utils
 
         public void Save(Maze maze)
         {
+            var content = GetString(maze);
             var result = saveFileDialog.ShowDialog();
             
             if (result.HasValue && result.Value)
             {
-                var content = GetString(maze);
-
                 try
                 {
                     File.WriteAllText(saveFileDialog.FileName, content);
