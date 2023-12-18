@@ -1,9 +1,8 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using MazeGenerating.Data;
 using MazeGeneratingByBacktracking_WPF.Models;
@@ -22,6 +21,7 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
         private int _canvasWidth;
         private int _canvasHeight;
         private ImageSource _mazeImage;
+        private bool drawingInProgress;
 
         #endregion Fields
 
@@ -92,14 +92,33 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
             }
         }
 
+        public bool DrawingInProgress
+        {
+            get => drawingInProgress;
+            set
+            {
+                if (drawingInProgress == value)
+                {
+                    return;
+                }
+                drawingInProgress = value;
+                RaisePropertyChanged(nameof(DrawingInProgress));
+                RaisePropertyChanged(nameof(ShowDrawingWarning));
+            }
+        }
+
+        public Visibility ShowDrawingWarning => DrawingInProgress ?
+            Visibility.Visible :
+            Visibility.Hidden;
+
         public int CellSize { get; set; } = 5;
 
         public ImageSource MazeImage
         {
             get => _mazeImage;
-            set 
-            { 
-                _mazeImage = value; 
+            set
+            {
+                _mazeImage = value;
                 RaisePropertyChanged(nameof(MazeImage));
             }
         }
@@ -139,12 +158,16 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
             var floor = Color.FromRgb(255, 255, 255);
             var wall = Color.FromRgb(0, 0, 0);
 
+            DrawingInProgress = true;
+
             MazeImage = await Task.Run(() => _mazeDrawer.Draw(Maze, (uint)CellSize, floor, wall));
+
+            DrawingInProgress = false;
         }
 
-        private Size GetCanvasSize(int cellSize)
+        private System.Drawing.Size GetCanvasSize(int cellSize)
         {
-            return new Size(
+            return new System.Drawing.Size(
                 Maze.Width * cellSize,
                 Maze.Height * cellSize);
         }

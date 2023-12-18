@@ -1,18 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using MazeGenerating.Data;
 using Color = System.Windows.Media.Color;
-using Size = System.Windows.Size;
 using Point = System.Windows.Point;
+using Size = System.Windows.Size;
 
 namespace MazeGeneratingByBacktracking_WPF.Utils
 {
     internal class MazeDrawer
     {
-       
+
 
         public ImageSource Draw(Maze maze, uint cellSize, Color floorColor, Color wallColor)
         {
@@ -34,31 +31,30 @@ namespace MazeGeneratingByBacktracking_WPF.Utils
             var floorBrush = new SolidColorBrush(floor);
             var wallBrush = new SolidColorBrush(wall);
 
-            for (int row = 0; row < maze.Height; row++)
+            var canvasSize = GetCanvasSize(maze, cellSize);
+
+            drawingContext.DrawRectangle(
+                brush: floorBrush,
+                pen: null,
+                rectangle: new Rect(canvasSize));
+
+            for (int i = 0; i < maze.Height; i++)
             {
-                for (int column = 0; column < maze.Width; column++)
+                for (int j = 0; j < maze.Width; j++)
                 {
-                    var cellType = maze[column, row];
+                    var cellType = maze[j, i];
 
-                    var brush = cellType == CellType.Floor ?
-                        floorBrush :
-                        wallBrush;
-
-                    drawingContext.DrawRectangle(
-                        brush: brush,
-                        pen: null,
-                        rectangle: CreateRect(row, column, cellSize));
+                    if (cellType == CellType.Wall)
+                    {
+                        drawingContext.DrawRectangle(
+                            brush: wallBrush,
+                            pen: null,
+                            rectangle: new Rect(
+                                new Point(j * cellSize, i * cellSize),
+                                new Size(cellSize, cellSize)));
+                    }
                 }
             }
-        }
-
-        private Rect CreateRect(int row, int column, uint cellSize)
-        {
-          return new Rect(
-                new Point(
-                    column * cellSize, 
-                    row * cellSize),
-                new Size(cellSize, cellSize));
         }
 
         private Size GetCanvasSize(Maze maze, uint cellSize)

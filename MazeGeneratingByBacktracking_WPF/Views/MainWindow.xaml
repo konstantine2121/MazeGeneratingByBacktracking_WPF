@@ -7,17 +7,17 @@
         mc:Ignorable="d"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:viewModel="clr-namespace:MazeGeneratingByBacktracking_WPF.ViewModels"
-        Title="MainWindow" Height="450" Width="800"
+        Title="Генератор лабиринта" Height="450" Width="600" MinWidth="550" MinHeight="300"
         d:DataContext="{d:DesignInstance Type=viewModel:GeneratorViewModel, IsDesignTimeCreatable=False}"
         >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Label>Генерация лабиринта: </Label>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
             
             <Label>ширина</Label>
             
@@ -53,8 +53,10 @@
             <Button Content="Сохранить" Margin="40 0 0 0" Command="{Binding SaveMazeCommand}"/>
         </StackPanel>
 
+        <Label Content="Идет отрисовка" Grid.Row="1" Foreground="Red" FontSize="16" Visibility="{Binding ShowDrawingWarning}" />
+
         <ScrollViewer
-            Grid.Row = "1" 
+            Grid.Row = "2" 
             HorizontalScrollBarVisibility="Visible"
             VerticalScrollBarVisibility="Visible"
             >
@@ -64,6 +66,7 @@
                 Width = "{Binding CanvasWidth}"
                 Height = "{Binding CanvasHeight}"
                 Source="{Binding MazeImage}"
+                Stretch="None"
                 />
 
         </ScrollViewer>
