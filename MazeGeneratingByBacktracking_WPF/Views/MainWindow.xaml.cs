@@ -16,17 +16,6 @@ namespace MazeGeneratingByBacktracking_WPF
             _viewModel = new GeneratorViewModel(new Generator(), this.Dispatcher);
             InitializeComponent();
             DataContext = _viewModel;
-            _viewModel.CellsChanged += OnCellsChanged;
-        }
-
-        private void OnCellsChanged(object? sender, System.EventArgs e)
-        {
-            canvas.Children.Clear();
-
-            foreach (var cell in _viewModel.Cells) 
-            {
-                canvas.Children.Add(cell);
-            }
         }
     }
 }

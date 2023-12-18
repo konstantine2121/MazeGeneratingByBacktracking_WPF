@@ -21,14 +21,13 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
         private readonly MazeSaver _saver = new MazeSaver();
         private int _canvasWidth;
         private int _canvasHeight;
-        private Rectangle[] _cells;
+        private ImageSource _mazeImage;
 
         #endregion Fields
 
         #region Events
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        public event EventHandler? CellsChanged;
 
         #endregion Events
 
@@ -95,13 +94,13 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
 
         public int CellSize { get; set; } = 5;
 
-        public Rectangle[] Cells
+        public ImageSource MazeImage
         {
-            get => _cells;
-            set
-            {
-                _cells = value;
-                CellsChanged?.Invoke(this, EventArgs.Empty);
+            get => _mazeImage;
+            set 
+            { 
+                _mazeImage = value; 
+                RaisePropertyChanged(nameof(MazeImage));
             }
         }
 
@@ -129,7 +128,7 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
 
         #region Methods
 
-        private void UpdateImage()
+        private async void UpdateImage()
         {
             var canvasSize = GetCanvasSize(CellSize);
             ((Command)SaveMazeCommand).RaiseCanExecuteChanged();
@@ -140,7 +139,7 @@ namespace MazeGeneratingByBacktracking_WPF.ViewModels
             var floor = Color.FromRgb(255, 255, 255);
             var wall = Color.FromRgb(0, 0, 0);
 
-            Cells = _mazeDrawer.CreateCells(Maze, (uint)CellSize, floor, wall);
+            MazeImage = await Task.Run(() => _mazeDrawer.Draw(Maze, (uint)CellSize, floor, wall));
         }
 
         private Size GetCanvasSize(int cellSize)

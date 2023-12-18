@@ -1,18 +1,36 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using MazeGenerating.Data;
 using Color = System.Windows.Media.Color;
+using Size = System.Windows.Size;
+using Point = System.Windows.Point;
 
 namespace MazeGeneratingByBacktracking_WPF.Utils
 {
     internal class MazeDrawer
     {
+       
 
-        public Rectangle[] CreateCells(Maze maze, uint cellSize, Color floor, Color wall)
+        public ImageSource Draw(Maze maze, uint cellSize, Color floorColor, Color wallColor)
         {
-            var cells = new List<Rectangle>();
+            DrawingVisual drawingVisual = new DrawingVisual();
+            DrawingContext drawingContext = drawingVisual.RenderOpen();
+
+            DrawRects(maze, cellSize, floorColor, wallColor, drawingContext);
+
+            drawingContext.Close();
+
+            DrawingImage drawingImageSource = new DrawingImage(drawingVisual.Drawing);
+            drawingImageSource.Freeze();
+
+            return drawingImageSource;
+        }
+
+        private void DrawRects(Maze maze, uint cellSize, Color floor, Color wall, DrawingContext drawingContext)
+        {
             var floorBrush = new SolidColorBrush(floor);
             var wallBrush = new SolidColorBrush(wall);
 
@@ -20,25 +38,34 @@ namespace MazeGeneratingByBacktracking_WPF.Utils
             {
                 for (int column = 0; column < maze.Width; column++)
                 {
-                    var brush = maze[column, row] == CellType.Floor ? floorBrush : wallBrush;
-                    cells.Add(CreateRectangle(row, column, cellSize, brush));
+                    var cellType = maze[column, row];
+
+                    var brush = cellType == CellType.Floor ?
+                        floorBrush :
+                        wallBrush;
+
+                    drawingContext.DrawRectangle(
+                        brush: brush,
+                        pen: null,
+                        rectangle: CreateRect(row, column, cellSize));
                 }
             }
-
-            return cells.ToArray();
         }
 
-        private Rectangle CreateRectangle(int row, int column, uint cellSize, SolidColorBrush solidColorBrush)
+        private Rect CreateRect(int row, int column, uint cellSize)
         {
-            var rect = new Rectangle();
-            rect.Fill = solidColorBrush;
-            rect.Width = cellSize;
-            rect.Height = cellSize;
+          return new Rect(
+                new Point(
+                    column * cellSize, 
+                    row * cellSize),
+                new Size(cellSize, cellSize));
+        }
 
-            Canvas.SetLeft(rect, column * cellSize);
-            Canvas.SetTop(rect, row * cellSize);
-
-            return rect;
+        private Size GetCanvasSize(Maze maze, uint cellSize)
+        {
+            return new Size(
+                maze.Width * cellSize,
+                maze.Height * cellSize);
         }
     }
 }

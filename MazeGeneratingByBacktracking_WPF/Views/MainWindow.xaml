@@ -58,14 +58,14 @@
             HorizontalScrollBarVisibility="Visible"
             VerticalScrollBarVisibility="Visible"
             >
-            <Canvas
+
+            <Image
                 x:Name = "canvas" 
                 Width = "{Binding CanvasWidth}"
                 Height = "{Binding CanvasHeight}"
-                
-                >
-                
-            </Canvas>
+                Source="{Binding MazeImage}"
+                />
+
         </ScrollViewer>
     </Grid>
 </Window>
